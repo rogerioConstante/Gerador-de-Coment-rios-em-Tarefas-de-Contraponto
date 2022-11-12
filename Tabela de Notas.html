@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <title>Tabela de notas</title>
+    <script type="text/javascript" src="nucleo.js"></script>
+    <script type="text/javascript" src="FileSaver.js"></script>
+    <style media="screen">
+      #dTurmas {
+        display: inline-block;
+        font: 14px Verdana;
+        left: 5px;
+        margin-top: 10px;
+        padding: 2px;
+        border: 1px solid #bbaf3d;
+        color: #bbaf3d;
+      }
+      #dtTarefa {
+        background: #dedfdd;
+        display: inline-block;
+        /* float: left; */
+        font: 12px Verdana;
+      }
+      #container {
+        position: absolute;
+        left: 5px;
+        padding: 0;
+        margin: 0;
+        background-color: #4f4f4f;
+        font: 15px Verdana;
+        border: 2px solid #bbaf3d;
+      }
+      #fProblemas {
+        background: #cdcecd;
+        display: inline-block;
+        float: right;
+        font: 12px Verdana;
+      }
+      .botaoPreset2{
+	       /* width:120px; */
+	       height:25px;
+	       background-color:#4f4f4f;
+	       color:#bbaf3d;
+	       font-size:14px;
+	       text-align:center;
+      }
+      .titulo {
+        height:30px;
+        padding: 3px;
+        background-color:#3f3f3c;
+        color:#bbaf3d;
+        font-size:14px;
+        text-align:left;
+      }
+      .relata {
+        height:100px;
+        width: 560px;
+        padding: 5px;
+        background-color:#3f3f3c;
+        color:#bbaf3d;
+        font-size:14px;
+        text-align:left;
+      }
+      td {
+        border: 1px solid #343434;
+      }
+      input {
+        color:#bbaf3d;
+        text-align:center;
+      }
+
+    </style>
+  </head>
+  <body style="background-color: #202425;">
+   <div id="dTurmas">
+       <input style="display: none;" type="file" id="fileinput">
+    	 <input type="button" class="botaoPreset2" onclick="document.getElementById('fileinput').click()" value="Abrir turma"/>
+       <input type="button" class="botaoPreset2" onclick = "salvarArquivo()" value="Salvar Turma"/>
+       <input type="button" class="botaoPreset2" onclick="criarComentarios()" value="Gerar comentários">
+       <input type="button" class="botaoPreset2" onclick="criarTarefa()" value="Nova tarefa">
+       <div id="titulo" value="Turma:"></div>
+   </div>
+   <br>
+   <div id="container" >
+     <div class="titulo">
+        Tarefa <input class="relata" type="number" min="1" max="18" style="margin-right: 10px; width: 40px; height:15px; font-weight: bold;" id="tar">
+        Aluna(o) número:<input type="text" style="margin-right: 15px; width: 20px; background-color:#3f3f3c;" id="aluno" value="">
+        Notas: a<input type="text" style="width: 20px; background-color:#3f3f3c;" id="notaA1" onchange="atualizaNota(1)">
+        <input type="text" style="width: 20px; background-color:#3f3f3c;" id="notaA2" onchange="atualizaNota(2)">
+        b <input type="text" style="width: 20px; background-color:#3f3f3c;" id="notaB1" onchange="atualizaNota(3)" >
+        <input type="text" style="width: 20px; background-color:#3f3f3c;" id="notaB2" onchange="atualizaNota(4)" >
+        c <input type="text" style="width: 20px; background-color:#3f3f3c;" id="notaC1" onchange="atualizaNota(5)" >
+        <input type="text" style="width: 20px; background-color:#3f3f3c;" id="notaC2" onchange="atualizaNota(6)" >
+        d <input type="text" style="width: 20px; background-color:#3f3f3c;" id="notaD1" onchange="atualizaNota(7)" >
+        <input type="text" style="width: 20px; background-color:#3f3f3c;" id="notaD2" onchange="atualizaNota(8)" >
+        <input type="checkbox" id="atrasado" onchange="atualizaAtraso()" style="margin-left: 50px;">atrasado
+        <input type="checkbox" id="revisão" onchange="atualizaRevisão()" style="margin-left: 40px;">revisão
+     </div>
+   <div id="dtTarefa">
+     <table id="tbTarefa" style="border-collapse: collapse;">
+       <thead>
+         <tr style="background-color:#989898; text-align:center; font-weight: bold;">
+           <td style="width: 20px"></td>
+           <td style="width: 270px; text-align:left;">Nome</td>
+           <td style="width: 40px" colspan="2">a</td>
+           <td style="width: 40px" colspan="2">b</td>
+           <td style="width: 40px" colspan="2">c</td>
+           <td style="width: 40px" colspan="2">d</td>
+           <td style="width: 50px">Média</td>
+           <td style="width: 50px">Prazo</td>
+           <!-- <td style="width: 250px">Problemas</td> -->
+         </tr>
+       </thead>
+     </table>
+   </div>
+   <div id="fProblemas">
+     <form id="fComentarios" action="index.html" >
+       <input type="checkbox" value="NNA">Uso de notas que não correspondem ao acorde da cifra.<br>
+       <input type="checkbox" value="IA">Intervalo melódico aumentado ou diminuto.<br>
+       <input type="checkbox" value="ATm">Tonalidade menor sem a alteração do 7º grau melódico (sensível).<br>
+       <input type="checkbox" value="PF">Repetição de Ponto Focal superior (agudo).<br>
+       <input type="checkbox" value="DC">Dissonância composta (dois saltos melódicos que geram uma 7ª ou 9ª).<br>
+       <input type="checkbox" value="MMD">Excesso de movimentos na mesma direção e em sequência.<br>
+       <input type="checkbox" value="SMD">Mais de 2 saltos seguidos na mesma direção.<br>
+       <input type="checkbox" value="IIF">Intervalo Inicial e final diferente de Uníssono e 8J.<br>
+       <input type="checkbox" value="SF">Acordes sem fundamental.<br>
+       <input type="checkbox" value="NPGC">Não prioriza grau conjunto ou terças.<br>
+       <input type="checkbox" value="CZ">Cruzamento de vozes.<br>
+       <input type="checkbox" value="D">Dissonância – uso não permitido ou sem tratamento.<br>
+       <input type="checkbox" value="NPCI">Não prioriza consonância imperfeita.<br>
+       <input type="checkbox" value="8ªO">Quintas ou oitavas ocultas.<br>
+       <input type="checkbox" value="8ªP">Quintas ou oitavas paralelas.<br>
+       <input type="checkbox" value="8ªI">Quintas ou oitavas intermitentes.<br>
+       <input type="checkbox" value="I>8">Intervalo melódico maior do que a oitava (não é permitido).<br>
+       <input type="checkbox" value="I>5">intervalo melódico maior do que a quinta, sem compensação.<br>
+       <input type="checkbox" value="I">Erro na indicação ou compreensão de intervalos ou sem indicação de intervalos.<br>
+       <input type="checkbox" value="RN">Repetição de notas (sem mudança na nota do CF).<br>
+       <input type="checkbox" value="PD">Usou poucas dissonâncias.<br>
+       <input type="checkbox" value="Arp">Excesso de arpejos na melodia.<br>
+       <input type="checkbox" value="Rit">Ritmo não característico da espécie.<br>
+       <input type="checkbox" value="Amm">Problemas no uso de alterações no modo menor.<br>
+       <input type="checkbox" value="RF">Ritmo errado na finalização.<br>
+       <input type="checkbox" value="2SMD">Dois saltos seguidos na mesma direção sem formar uma tríade ou 5J+4J ou 4J+5J.<br>
+       <input type="checkbox" value="col1">Colcheias em tempo forte (deve ser somente em tempo fraco).<br>
+       <input type="checkbox" value="col2">Colcheias não usadas em par ou sincopadas.<br>
+       <input type="checkbox" value="col3">Excesso de colcheias (deve ser somente um par por compasso).<br>
+       <input type="checkbox" value="sens">Cadência final sem a sensível ou sem a resolução da sensível.<br>
+       <input type="checkbox" value="col4">Colcheias movimentando por salto (deve ser por grau conjunto).<br>
+       <input type="checkbox" value="RV">Ritmo com pouca variação e/ou segmentado.<br>
+       <input type="checkbox" value="Afas">Distância/afastamento entre as vozes está muito amplo.<br>
+       <input type="checkbox" value="DRit">Duração da dissonância é muito maior do que a da preparação ou da resolução.<br>
+
+       <br>
+
+     </form>
+   </div>
+   <div>
+     <textarea class="relata" id="comentarios" rows="8" cols="160"></textarea>
+   </div>
+ </div>
+<script type="text/javascript">
+
+
+    document.getElementById('fileinput').addEventListener('change', carregarArquivo, false);
+    document.getElementById('tar').addEventListener('change', selecionaTarefa);
+    document.getElementById('aluno').addEventListener('change', selecionaAluno);
+    //document.getElementById('notaA1').addEventListener('change', atualizaNota(1));
+    // document.getElementById('tar').addEventListener('change', atualizaTarefa);
+    // document.getElementById('tar').addEventListener('change', atualizaTarefa);
+    // document.getElementById('tar').addEventListener('change', atualizaTarefa);
+    // document.getElementById('tar').addEventListener('change', atualizaTarefa);
+    // document.getElementById('tar').addEventListener('change', atualizaTarefa);
+    // document.getElementById('tar').addEventListener('change', atualizaTarefa);
+
+</script>
+  </body>
+</html>
